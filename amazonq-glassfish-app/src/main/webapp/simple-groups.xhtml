@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Simple Groups</title>
+</h:head>
+
+<h:body>
+    <h:form>
+        <p:growl showDetail="true" life="3000"/>
+        
+        <h3>Add New Group</h3>
+        <p:panelGrid columns="2">
+            <p:outputLabel value="Name:"/>
+            <p:inputText value="#{groupBean.newGroup.name}" required="true"/>
+            
+            <p:outputLabel value="Description:"/>
+            <p:inputTextarea value="#{groupBean.newGroup.description}" rows="2"/>
+        </p:panelGrid>
+        
+        <p:commandButton value="Save Group" action="#{groupBean.saveGroup}" update="@form,groupsTable"/>
+        
+        <h3>Existing Groups</h3>
+        <p:dataTable id="groupsTable" value="#{groupBean.groups}" var="group">
+            <p:column headerText="Name">
+                <h:outputText value="#{group.name}"/>
+            </p:column>
+            <p:column headerText="Description">
+                <h:outputText value="#{group.description}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</h:body>
+</html>

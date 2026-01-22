@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Groups Management</title>
+</h:head>
+
+<h:body>
+    <h:form id="form">
+        <p:growl id="messages" showDetail="true" life="3000"/>
+        
+        <p:panel header="Groups Management" style="margin-bottom:20px">
+            <p:menubar>
+                <p:menuitem value="People" url="people.xhtml"/>
+                <p:menuitem value="Groups" url="groups.xhtml"/>
+                <p:menuitem value="Schedule" url="schedule.xhtml"/>
+                <f:facet name="options">
+                    <p:outputLabel value="Welcome, #{sessionScope.username}" style="margin-right: 10px;"/>
+                    <p:button value="Logout" href="logout" styleClass="ui-button-secondary"/>
+                </f:facet>
+            </p:menubar>
+
+            <p:commandButton value="Add Group" action="#{groupBean.toggleAddForm}"
+                           icon="pi pi-plus" styleClass="ui-button-success" style="margin:10px 0" ajax="false"/>
+
+            <h:panelGroup rendered="#{groupBean.showAddForm}">
+                <h:panelGrid columns="2" cellpadding="5" style="margin:10px 0">
+                    <p:outputLabel for="newName" value="Name:"/>
+                    <p:inputText id="newName" value="#{groupBean.newGroup.name}"/>
+
+                    <p:outputLabel for="newDescription" value="Description:"/>
+                    <p:inputTextarea id="newDescription" value="#{groupBean.newGroup.description}" rows="3"/>
+                </h:panelGrid>
+                
+                <p:commandButton value="Save" action="#{groupBean.saveGroup}"
+                               styleClass="ui-button-success" style="margin-right:10px" ajax="false"/>
+                <!-- Cancel button outside the form but inside the conditional panel -->
+                <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-button-secondary" 
+                        onclick="window.location.href='groups.xhtml'" style="margin-left:5px">
+                    <span class="ui-button-text ui-c">Cancel</span>
+                </button>
+            </h:panelGroup>
+
+            <p:dataTable id="groupsTable" value="#{groupBean.groups}" var="group" paginator="true" rows="10">
+                <p:column headerText="ID">
+                    <h:outputText value="#{group.id}"/>
+                </p:column>
+                <p:column headerText="Name">
+                    <h:outputText value="#{group.name}"/>
+                </p:column>
+                <p:column headerText="Description">
+                    <h:outputText value="#{group.description}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+</h:body>
+</html>

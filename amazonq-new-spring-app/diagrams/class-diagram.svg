@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .class-box { fill: #f0f8ff; stroke: #4682b4; stroke-width: 2; }
+      .interface-box { fill: #f5f5dc; stroke: #8b4513; stroke-width: 2; }
+      .entity-box { fill: #f0fff0; stroke: #228b22; stroke-width: 2; }
+      .util-box { fill: #fff0f5; stroke: #dc143c; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; }
+      .title { font-weight: bold; font-size: 14px; }
+      .method { font-size: 10px; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dependency { stroke: #666; stroke-width: 1; stroke-dasharray: 5,5; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="30" class="text title" text-anchor="middle">School Management System - Class Diagram</text>
+
+  <!-- Controllers Layer -->
+  <text x="100" y="70" class="text title">Controllers</text>
+  
+  <!-- PersonController -->
+  <rect x="50" y="80" width="180" height="120" class="class-box"/>
+  <text x="140" y="100" class="text title" text-anchor="middle">PersonController</text>
+  <line x1="50" y1="105" x2="230" y2="105" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="120" class="text method">+getAllPeople(): List&lt;Person&gt;</text>
+  <text x="60" y="135" class="text method">+createPerson(request): Person</text>
+  <text x="60" y="150" class="text method">+updatePerson(id, request): Person</text>
+  <text x="60" y="165" class="text method">+deletePerson(id): void</text>
+  <text x="60" y="180" class="text method">-personService: PersonService</text>
+
+  <!-- GroupController -->
+  <rect x="250" y="80" width="180" height="120" class="class-box"/>
+  <text x="340" y="100" class="text title" text-anchor="middle">GroupController</text>
+  <line x1="250" y1="105" x2="430" y2="105" stroke="#4682b4" stroke-width="1"/>
+  <text x="260" y="120" class="text method">+getAllGroups(): List&lt;Group&gt;</text>
+  <text x="260" y="135" class="text method">+createGroup(request): Group</text>
+  <text x="260" y="150" class="text method">+updateGroup(id, request): Group</text>
+  <text x="260" y="165" class="text method">+deleteGroup(id): void</text>
+  <text x="260" y="180" class="text method">-groupService: GroupService</text>
+
+  <!-- SubjectController -->
+  <rect x="450" y="80" width="180" height="120" class="class-box"/>
+  <text x="540" y="100" class="text title" text-anchor="middle">SubjectController</text>
+  <line x1="450" y1="105" x2="630" y2="105" stroke="#4682b4" stroke-width="1"/>
+  <text x="460" y="120" class="text method">+getAllSubjects(): List&lt;Subject&gt;</text>
+  <text x="460" y="135" class="text method">+createSubject(request): Subject</text>
+  <text x="460" y="150" class="text method">+updateSubject(id, request): Subject</text>
+  <text x="460" y="165" class="text method">+deleteSubject(id): void</text>
+  <text x="460" y="180" class="text method">-subjectService: SubjectService</text>
+
+  <!-- GradeController -->
+  <rect x="650" y="80" width="180" height="120" class="class-box"/>
+  <text x="740" y="100" class="text title" text-anchor="middle">GradeController</text>
+  <line x1="650" y1="105" x2="830" y2="105" stroke="#4682b4" stroke-width="1"/>
+  <text x="660" y="120" class="text method">+getAllGrades(): List&lt;Grade&gt;</text>
+  <text x="660" y="135" class="text method">+createGrade(request): Grade</text>
+  <text x="660" y="150" class="text method">+updateGrade(id, request): Grade</text>
+  <text x="660" y="165" class="text method">+deleteGrade(id): void</text>
+  <text x="660" y="180" class="text method">-gradeService: GradeService</text>
+
+  <!-- ScheduleController -->
+  <rect x="850" y="80" width="180" height="120" class="class-box"/>
+  <text x="940" y="100" class="text title" text-anchor="middle">ScheduleController</text>
+  <line x1="850" y1="105" x2="1030" y2="105" stroke="#4682b4" stroke-width="1"/>
+  <text x="860" y="120" class="text method">+getAllSchedules(): List&lt;Schedule&gt;</text>
+  <text x="860" y="135" class="text method">+createSchedule(request): Schedule</text>
+  <text x="860" y="150" class="text method">+updateSchedule(id, request): Schedule</text>
+  <text x="860" y="165" class="text method">+deleteSchedule(id): void</text>
+  <text x="860" y="180" class="text method">-scheduleService: ScheduleService</text>
+
+  <!-- Services Layer -->
+  <text x="100" y="250" class="text title">Services</text>
+
+  <!-- PersonService -->
+  <rect x="50" y="260" width="180" height="140" class="class-box"/>
+  <text x="140" y="280" class="text title" text-anchor="middle">PersonService</text>
+  <line x1="50" y1="285" x2="230" y2="285" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="300" class="text method">+findAll(): List&lt;Person&gt;</text>
+  <text x="60" y="315" class="text method">+create(request): Person</text>
+  <text x="60" y="330" class="text method">+update(id, request): Person</text>
+  <text x="60" y="345" class="text method">+delete(id): void</text>
+  <text x="60" y="360" class="text method">-validateAndExtractPersonData()</text>
+  <text x="60" y="375" class="text method">-personRepository: PersonRepository</text>
+  <text x="60" y="390" class="text method">-groupRepository: GroupRepository</text>
+
+  <!-- GroupService -->
+  <rect x="250" y="260" width="180" height="140" class="class-box"/>
+  <text x="340" y="280" class="text title" text-anchor="middle">GroupService</text>
+  <line x1="250" y1="285" x2="430" y2="285" stroke="#4682b4" stroke-width="1"/>
+  <text x="260" y="300" class="text method">+findAll(): List&lt;Group&gt;</text>
+  <text x="260" y="315" class="text method">+create(request): Group</text>
+  <text x="260" y="330" class="text method">+update(id, request): Group</text>
+  <text x="260" y="345" class="text method">+delete(id): void</text>
+  <text x="260" y="360" class="text method">-groupRepository: GroupRepository</text>
+
+  <!-- SubjectService -->
+  <rect x="450" y="260" width="180" height="140" class="class-box"/>
+  <text x="540" y="280" class="text title" text-anchor="middle">SubjectService</text>
+  <line x1="450" y1="285" x2="630" y2="285" stroke="#4682b4" stroke-width="1"/>
+  <text x="460" y="300" class="text method">+findAll(): List&lt;Subject&gt;</text>
+  <text x="460" y="315" class="text method">+create(request): Subject</text>
+  <text x="460" y="330" class="text method">+update(id, request): Subject</text>
+  <text x="460" y="345" class="text method">+delete(id): void</text>
+  <text x="460" y="360" class="text method">-subjectRepository: SubjectRepository</text>
+
+  <!-- GradeService -->
+  <rect x="650" y="260" width="180" height="140" class="class-box"/>
+  <text x="740" y="280" class="text title" text-anchor="middle">GradeService</text>
+  <line x1="650" y1="285" x2="830" y2="285" stroke="#4682b4" stroke-width="1"/>
+  <text x="660" y="300" class="text method">+findAll(): List&lt;Grade&gt;</text>
+  <text x="660" y="315" class="text method">+create(request): Grade</text>
+  <text x="660" y="330" class="text method">+update(id, request): Grade</text>
+  <text x="660" y="345" class="text method">+delete(id): void</text>
+  <text x="660" y="360" class="text method">-gradeRepository: GradeRepository</text>
+
+  <!-- ScheduleService -->
+  <rect x="850" y="260" width="180" height="140" class="class-box"/>
+  <text x="940" y="280" class="text title" text-anchor="middle">ScheduleService</text>
+  <line x1="850" y1="285" x2="1030" y2="285" stroke="#4682b4" stroke-width="1"/>
+  <text x="860" y="300" class="text method">+findAll(): List&lt;Schedule&gt;</text>
+  <text x="860" y="315" class="text method">+create(request): Schedule</text>
+  <text x="860" y="330" class="text method">+update(id, request): Schedule</text>
+  <text x="860" y="345" class="text method">+delete(id): void</text>
+  <text x="860" y="360" class="text method">-validateAndExtractScheduleData()</text>
+  <text x="860" y="375" class="text method">-scheduleRepository: ScheduleRepository</text>
+  <text x="860" y="390" class="text method">-personRepository, subjectRepository, gradeRepository</text>
+
+  <!-- Entities Layer -->
+  <text x="100" y="450" class="text title">Entities</text>
+
+  <!-- Person Entity -->
+  <rect x="50" y="460" width="150" height="120" class="entity-box"/>
+  <text x="125" y="480" class="text title" text-anchor="middle">Person</text>
+  <line x1="50" y1="485" x2="200" y2="485" stroke="#228b22" stroke-width="1"/>
+  <text x="60" y="500" class="text method">-id: Long</text>
+  <text x="60" y="515" class="text method">-firstName: String</text>
+  <text x="60" y="530" class="text method">-lastName: String</text>
+  <text x="60" y="545" class="text method">-group: Group</text>
+  <text x="60" y="560" class="text method">-grade: Grade</text>
+  <text x="60" y="575" class="text method">-subjects: Set&lt;Subject&gt;</text>
+
+  <!-- Group Entity -->
+  <rect x="220" y="460" width="150" height="100" class="entity-box"/>
+  <text x="295" y="480" class="text title" text-anchor="middle">Group</text>
+  <line x1="220" y1="485" x2="370" y2="485" stroke="#228b22" stroke-width="1"/>
+  <text x="230" y="500" class="text method">-id: Long</text>
+  <text x="230" y="515" class="text method">-name: String</text>
+  <text x="230" y="530" class="text method">-people: Set&lt;Person&gt;</text>
+
+  <!-- Subject Entity -->
+  <rect x="390" y="460" width="150" height="100" class="entity-box"/>
+  <text x="465" y="480" class="text title" text-anchor="middle">Subject</text>
+  <line x1="390" y1="485" x2="540" y2="485" stroke="#228b22" stroke-width="1"/>
+  <text x="400" y="500" class="text method">-id: Long</text>
+  <text x="400" y="515" class="text method">-name: String</text>
+
+  <!-- Grade Entity -->
+  <rect x="560" y="460" width="150" height="100" class="entity-box"/>
+  <text x="635" y="480" class="text title" text-anchor="middle">Grade</text>
+  <line x1="560" y1="485" x2="710" y2="485" stroke="#228b22" stroke-width="1"/>
+  <text x="570" y="500" class="text method">-id: Long</text>
+  <text x="570" y="515" class="text method">-level: Integer</text>
+  <text x="570" y="530" class="text method">-subjects: Set&lt;Subject&gt;</text>
+
+  <!-- Schedule Entity -->
+  <rect x="730" y="460" width="150" height="120" class="entity-box"/>
+  <text x="805" y="480" class="text title" text-anchor="middle">Schedule</text>
+  <line x1="730" y1="485" x2="880" y2="485" stroke="#228b22" stroke-width="1"/>
+  <text x="740" y="500" class="text method">-id: Long</text>
+  <text x="740" y="515" class="text method">-dayOfWeek: Integer</text>
+  <text x="740" y="530" class="text method">-timeSlot: Integer</text>
+  <text x="740" y="545" class="text method">-teacher: Person</text>
+  <text x="740" y="560" class="text method">-subject: Subject</text>
+  <text x="740" y="575" class="text method">-grade: Grade</text>
+
+  <!-- Repositories Layer -->
+  <text x="100" y="620" class="text title">Repositories</text>
+
+  <!-- PersonRepository -->
+  <rect x="50" y="630" width="150" height="80" class="interface-box"/>
+  <text x="125" y="650" class="text title" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <text x="125" y="665" class="text title" text-anchor="middle">PersonRepository</text>
+  <line x1="50" y1="670" x2="200" y2="670" stroke="#8b4513" stroke-width="1"/>
+  <text x="60" y="685" class="text method">extends JpaRepository</text>
+  <text x="60" y="700" class="text method">&lt;Person, Long&gt;</text>
+
+  <!-- GroupRepository -->
+  <rect x="220" y="630" width="150" height="80" class="interface-box"/>
+  <text x="295" y="650" class="text title" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <text x="295" y="665" class="text title" text-anchor="middle">GroupRepository</text>
+  <line x1="220" y1="670" x2="370" y2="670" stroke="#8b4513" stroke-width="1"/>
+  <text x="230" y="685" class="text method">extends JpaRepository</text>
+  <text x="230" y="700" class="text method">&lt;Group, Long&gt;</text>
+
+  <!-- SubjectRepository -->
+  <rect x="390" y="630" width="150" height="80" class="interface-box"/>
+  <text x="465" y="650" class="text title" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <text x="465" y="665" class="text title" text-anchor="middle">SubjectRepository</text>
+  <line x1="390" y1="670" x2="540" y2="670" stroke="#8b4513" stroke-width="1"/>
+  <text x="400" y="685" class="text method">extends JpaRepository</text>
+  <text x="400" y="700" class="text method">&lt;Subject, Long&gt;</text>
+
+  <!-- GradeRepository -->
+  <rect x="560" y="630" width="150" height="80" class="interface-box"/>
+  <text x="635" y="650" class="text title" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <text x="635" y="665" class="text title" text-anchor="middle">GradeRepository</text>
+  <line x1="560" y1="670" x2="710" y2="670" stroke="#8b4513" stroke-width="1"/>
+  <text x="570" y="685" class="text method">extends JpaRepository</text>
+  <text x="570" y="700" class="text method">&lt;Grade, Long&gt;</text>
+
+  <!-- ScheduleRepository -->
+  <rect x="730" y="630" width="150" height="80" class="interface-box"/>
+  <text x="805" y="650" class="text title" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <text x="805" y="665" class="text title" text-anchor="middle">ScheduleRepository</text>
+  <line x1="730" y1="670" x2="880" y2="670" stroke="#8b4513" stroke-width="1"/>
+  <text x="740" y="685" class="text method">extends JpaRepository</text>
+  <text x="740" y="700" class="text method">&lt;Schedule, Long&gt;</text>
+
+  <!-- ValidationUtils -->
+  <rect x="950" y="460" width="200" height="120" class="util-box"/>
+  <text x="1050" y="480" class="text title" text-anchor="middle">&lt;&lt;utility&gt;&gt;</text>
+  <text x="1050" y="495" class="text title" text-anchor="middle">ValidationUtils</text>
+  <line x1="950" y1="500" x2="1150" y2="500" stroke="#dc143c" stroke-width="1"/>
+  <text x="960" y="515" class="text method">+validateAndTrimString()</text>
+  <text x="960" y="530" class="text method">+validateAndConvertToLong()</text>
+  <text x="960" y="545" class="text method">+validateAndConvertToInteger()</text>
+  <text x="960" y="560" class="text method">+validateOptionalLong()</text>
+
+  <!-- Dependencies -->
+  <!-- Controllers to Services -->
+  <line x1="140" y1="200" x2="140" y2="260" class="arrow"/>
+  <line x1="340" y1="200" x2="340" y2="260" class="arrow"/>
+  <line x1="540" y1="200" x2="540" y2="260" class="arrow"/>
+  <line x1="740" y1="200" x2="740" y2="260" class="arrow"/>
+  <line x1="940" y1="200" x2="940" y2="260" class="arrow"/>
+
+  <!-- Services to Repositories -->
+  <line x1="140" y1="400" x2="125" y2="630" class="arrow"/>
+  <line x1="340" y1="400" x2="295" y2="630" class="arrow"/>
+  <line x1="540" y1="400" x2="465" y2="630" class="arrow"/>
+  <line x1="740" y1="400" x2="635" y2="630" class="arrow"/>
+  <line x1="940" y1="400" x2="805" y2="630" class="arrow"/>
+
+  <!-- Services to ValidationUtils -->
+  <line x1="540" y1="320" x2="950" y2="520" class="dependency"/>
+  <line x1="740" y1="320" x2="950" y2="540" class="dependency"/>
+  <line x1="940" y1="320" x2="950" y2="560" class="dependency"/>
+
+  <!-- Entity Relationships -->
+  <line x1="200" y1="520" x2="220" y2="520" class="arrow"/>
+  <text x="205" y="515" class="text method">group</text>
+  
+  <line x1="125" y1="580" x2="635" y2="580" class="arrow"/>
+  <text x="380" y="575" class="text method">grade</text>
+
+</svg>

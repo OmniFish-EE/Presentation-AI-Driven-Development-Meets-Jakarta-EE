@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000">
+  <defs>
+    <style>
+      .actor-box { fill: #e6f3ff; stroke: #0066cc; stroke-width: 2; }
+      .actor-text { fill: #000080; font-family: Arial; font-size: 12px; font-weight: bold; text-anchor: middle; }
+      .lifeline { stroke: #666; stroke-width: 1; stroke-dasharray: 5,5; }
+      .message { stroke: #333; stroke-width: 2; fill: none; }
+      .message-text { fill: #000; font-family: Arial; font-size: 11px; }
+      .activation { fill: #ffffcc; stroke: #333; stroke-width: 1; }
+      .arrow { fill: #333; }
+      .title { fill: #000080; font-family: Arial; font-size: 16px; font-weight: bold; text-anchor: middle; }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="25" class="title">School Management System - Sequence Diagrams</text>
+  
+  <!-- Actors -->
+  <rect x="50" y="50" width="100" height="40" class="actor-box"/>
+  <text x="100" y="75" class="actor-text">User</text>
+  
+  <rect x="200" y="50" width="120" height="40" class="actor-box"/>
+  <text x="260" y="75" class="actor-text">JSF Page</text>
+  
+  <rect x="370" y="50" width="120" height="40" class="actor-box"/>
+  <text x="430" y="75" class="actor-text">PersonBean</text>
+  
+  <rect x="540" y="50" width="120" height="40" class="actor-box"/>
+  <text x="600" y="75" class="actor-text">PersonService</text>
+  
+  <rect x="710" y="50" width="120" height="40" class="actor-box"/>
+  <text x="770" y="75" class="actor-text">EntityManager</text>
+  
+  <rect x="880" y="50" width="120" height="40" class="actor-box"/>
+  <text x="940" y="75" class="actor-text">Database</text>
+  
+  <!-- Lifelines -->
+  <line x1="100" y1="90" x2="100" y2="950" class="lifeline"/>
+  <line x1="260" y1="90" x2="260" y2="950" class="lifeline"/>
+  <line x1="430" y1="90" x2="430" y2="950" class="lifeline"/>
+  <line x1="600" y1="90" x2="600" y2="950" class="lifeline"/>
+  <line x1="770" y1="90" x2="770" y2="950" class="lifeline"/>
+  <line x1="940" y1="90" x2="940" y2="950" class="lifeline"/>
+  
+  <!-- Scenario 1: View People List -->
+  <text x="50" y="130" class="message-text" font-weight="bold">1. View People List</text>
+  
+  <!-- User -> JSF Page -->
+  <line x1="100" y1="150" x2="260" y2="150" class="message"/>
+  <polygon points="255,145 265,150 255,155" class="arrow"/>
+  <text x="180" y="145" class="message-text">GET /people.xhtml</text>
+  
+  <!-- JSF Page -> PersonBean -->
+  <rect x="425" y="170" width="10" height="60" class="activation"/>
+  <line x1="260" y1="180" x2="430" y2="180" class="message"/>
+  <polygon points="425,175 435,180 425,185" class="arrow"/>
+  <text x="345" y="175" class="message-text">getPeople()</text>
+  
+  <!-- PersonBean -> PersonService -->
+  <rect x="595" y="200" width="10" height="40" class="activation"/>
+  <line x1="430" y1="210" x2="600" y2="210" class="message"/>
+  <polygon points="595,205 605,210 595,215" class="arrow"/>
+  <text x="515" y="205" class="message-text">findAll()</text>
+  
+  <!-- PersonService -> EntityManager -->
+  <rect x="765" y="220" width="10" height="20" class="activation"/>
+  <line x1="600" y1="230" x2="770" y2="230" class="message"/>
+  <polygon points="765,225 775,230 765,235" class="arrow"/>
+  <text x="685" y="225" class="message-text">createQuery()</text>
+  
+  <!-- Return responses -->
+  <line x1="770" y1="250" x2="600" y2="250" class="message" stroke-dasharray="3,3"/>
+  <polygon points="605,245 595,250 605,255" class="arrow"/>
+  <text x="685" y="245" class="message-text">List&lt;Person&gt;</text>
+  
+  <line x1="600" y1="270" x2="430" y2="270" class="message" stroke-dasharray="3,3"/>
+  <polygon points="435,265 425,270 435,275" class="arrow"/>
+  <text x="515" y="265" class="message-text">List&lt;Person&gt;</text>
+  
+  <line x1="430" y1="290" x2="260" y2="290" class="message" stroke-dasharray="3,3"/>
+  <polygon points="265,285 255,290 265,295" class="arrow"/>
+  <text x="345" y="285" class="message-text">people data</text>
+  
+  <line x1="260" y1="310" x2="100" y2="310" class="message" stroke-dasharray="3,3"/>
+  <polygon points="105,305 95,310 105,315" class="arrow"/>
+  <text x="180" y="305" class="message-text">HTML page</text>
+  
+  <!-- Scenario 2: Add New Person -->
+  <text x="50" y="360" class="message-text" font-weight="bold">2. Add New Person</text>
+  
+  <!-- User fills form and submits -->
+  <line x1="100" y1="380" x2="260" y2="380" class="message"/>
+  <polygon points="255,375 265,380 255,385" class="arrow"/>
+  <text x="180" y="375" class="message-text">Submit form</text>
+  
+  <!-- JSF Page -> PersonBean -->
+  <rect x="425" y="400" width="10" height="80" class="activation"/>
+  <line x1="260" y1="410" x2="430" y2="410" class="message"/>
+  <polygon points="425,405 435,410 425,415" class="arrow"/>
+  <text x="345" y="405" class="message-text">savePerson()</text>
+  
+  <!-- PersonBean -> PersonService -->
+  <rect x="595" y="430" width="10" height="60" class="activation"/>
+  <line x1="430" y1="440" x2="600" y2="440" class="message"/>
+  <polygon points="595,435 605,440 595,445" class="arrow"/>
+  <text x="515" y="435" class="message-text">create(person)</text>
+  
+  <!-- PersonService -> EntityManager -->
+  <rect x="765" y="460" width="10" height="40" class="activation"/>
+  <line x1="600" y1="470" x2="770" y2="470" class="message"/>
+  <polygon points="765,465 775,470 765,475" class="arrow"/>
+  <text x="685" y="465" class="message-text">persist(person)</text>
+  
+  <!-- EntityManager -> Database -->
+  <rect x="935" y="480" width="10" height="20" class="activation"/>
+  <line x1="770" y1="490" x2="940" y2="490" class="message"/>
+  <polygon points="935,485 945,490 935,495" class="arrow"/>
+  <text x="855" y="485" class="message-text">INSERT</text>
+  
+  <!-- Return responses -->
+  <line x1="940" y1="510" x2="770" y2="510" class="message" stroke-dasharray="3,3"/>
+  <polygon points="775,505 765,510 775,515" class="arrow"/>
+  <text x="855" y="505" class="message-text">success</text>
+  
+  <line x1="770" y1="530" x2="600" y2="530" class="message" stroke-dasharray="3,3"/>
+  <polygon points="605,525 595,530 605,535" class="arrow"/>
+  
+  <line x1="600" y1="550" x2="430" y2="550" class="message" stroke-dasharray="3,3"/>
+  <polygon points="435,545 425,550 435,555" class="arrow"/>
+  
+  <line x1="430" y1="570" x2="260" y2="570" class="message" stroke-dasharray="3,3"/>
+  <polygon points="265,565 255,570 265,575" class="arrow"/>
+  <text x="345" y="565" class="message-text">redirect</text>
+  
+  <line x1="260" y1="590" x2="100" y2="590" class="message" stroke-dasharray="3,3"/>
+  <polygon points="105,585 95,590 105,595" class="arrow"/>
+  <text x="180" y="585" class="message-text">updated page</text>
+  
+  <!-- Scenario 3: View Schedule -->
+  <text x="50" y="640" class="message-text" font-weight="bold">3. View Schedule</text>
+  
+  <!-- Additional actors for schedule -->
+  <rect x="1050" y="50" width="120" height="40" class="actor-box"/>
+  <text x="1110" y="75" class="actor-text">ScheduleBean</text>
+  <line x1="1110" y1="90" x2="1110" y2="950" class="lifeline"/>
+  
+  <!-- User -> JSF Page -->
+  <line x1="100" y1="660" x2="260" y2="660" class="message"/>
+  <polygon points="255,655 265,660 255,665" class="arrow"/>
+  <text x="180" y="655" class="message-text">GET /schedule.xhtml</text>
+  
+  <!-- JSF Page -> ScheduleBean -->
+  <rect x="1105" y="680" width="10" height="60" class="activation"/>
+  <line x1="260" y1="690" x2="1110" y2="690" class="message"/>
+  <polygon points="1105,685 1115,690 1105,695" class="arrow"/>
+  <text x="685" y="685" class="message-text">getScheduleGrid()</text>
+  
+  <!-- ScheduleBean -> EntityManager -->
+  <rect x="765" y="710" width="10" height="40" class="activation"/>
+  <line x1="1110" y1="720" x2="770" y2="720" class="message"/>
+  <polygon points="775,715 765,720 775,725" class="arrow"/>
+  <text x="940" y="715" class="message-text">createQuery("SELECT s FROM Schedule s")</text>
+  
+  <!-- EntityManager -> Database -->
+  <rect x="935" y="730" width="10" height="20" class="activation"/>
+  <line x1="770" y1="740" x2="940" y2="740" class="message"/>
+  <polygon points="935,735 945,740 935,745" class="arrow"/>
+  <text x="855" y="735" class="message-text">SELECT</text>
+  
+  <!-- Return responses -->
+  <line x1="940" y1="760" x2="770" y2="760" class="message" stroke-dasharray="3,3"/>
+  <polygon points="775,755 765,760 775,765" class="arrow"/>
+  <text x="855" y="755" class="message-text">schedule data</text>
+  
+  <line x1="770" y1="780" x2="1110" y2="780" class="message" stroke-dasharray="3,3"/>
+  <polygon points="1105,775 1115,780 1105,785" class="arrow"/>
+  <text x="940" y="775" class="message-text">List&lt;Schedule&gt;</text>
+  
+  <line x1="1110" y1="800" x2="260" y2="800" class="message" stroke-dasharray="3,3"/>
+  <polygon points="265,795 255,800 265,805" class="arrow"/>
+  <text x="685" y="795" class="message-text">schedule grid</text>
+  
+  <line x1="260" y1="820" x2="100" y2="820" class="message" stroke-dasharray="3,3"/>
+  <polygon points="105,815 95,820 105,825" class="arrow"/>
+  <text x="180" y="815" class="message-text">schedule calendar</text>
+  
+  <!-- Scenario 4: Delete Person -->
+  <text x="50" y="870" class="message-text" font-weight="bold">4. Delete Person (with confirmation)</text>
+  
+  <!-- User clicks delete -->
+  <line x1="100" y1="890" x2="260" y2="890" class="message"/>
+  <polygon points="255,885 265,890 255,895" class="arrow"/>
+  <text x="180" y="885" class="message-text">click delete</text>
+  
+  <!-- JSF shows confirmation -->
+  <line x1="260" y1="910" x2="100" y2="910" class="message" stroke-dasharray="3,3"/>
+  <polygon points="105,905 95,910 105,915" class="arrow"/>
+  <text x="180" y="905" class="message-text">confirm dialog</text>
+  
+  <!-- User confirms -->
+  <line x1="100" y1="930" x2="430" y2="930" class="message"/>
+  <polygon points="425,925 435,930 425,935" class="arrow"/>
+  <text x="265" y="925" class="message-text">deletePerson() → redirect</text>
+  
+  <!-- Notes -->
+  <rect x="1200" y="100" width="180" height="200" fill="#fff9c4" stroke="#f0c040" stroke-width="1"/>
+  <text x="1290" y="120" class="actor-text">Key Patterns</text>
+  <text x="1210" y="140" class="message-text">• JSF managed beans</text>
+  <text x="1210" y="155" class="message-text">• Service layer pattern</text>
+  <text x="1210" y="170" class="message-text">• JPA EntityManager</text>
+  <text x="1210" y="185" class="message-text">• Transaction management</text>
+  <text x="1210" y="200" class="message-text">• Post-Redirect-Get</text>
+  <text x="1210" y="215" class="message-text">• AJAX disabled for</text>
+  <text x="1210" y="230" class="message-text">  reliable form handling</text>
+  <text x="1210" y="245" class="message-text">• Navigation outcomes</text>
+  <text x="1210" y="260" class="message-text">• Session scoped beans</text>
+  <text x="1210" y="275" class="message-text">• Data initialization</text>
+  
+  <!-- Endpoints Legend -->
+  <rect x="1200" y="320" width="180" height="150" fill="#f0f8ff" stroke="#4682b4" stroke-width="1"/>
+  <text x="1290" y="340" class="actor-text">Main Endpoints</text>
+  <text x="1210" y="360" class="message-text">• /people.xhtml</text>
+  <text x="1210" y="375" class="message-text">• /groups.xhtml</text>
+  <text x="1210" y="390" class="message-text">• /schedule.xhtml</text>
+  <text x="1210" y="405" class="message-text">• /api/people (REST)</text>
+  <text x="1210" y="420" class="message-text">• Form submissions</text>
+  <text x="1210" y="435" class="message-text">• AJAX updates</text>
+  <text x="1210" y="450" class="message-text">• Navigation actions</text>
+</svg>

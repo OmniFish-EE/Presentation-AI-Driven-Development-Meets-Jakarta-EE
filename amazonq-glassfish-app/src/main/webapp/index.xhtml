@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>School Management System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .login-section { background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .nav-links { margin-top: 30px; }
+        .nav-links a { display: inline-block; margin: 10px 15px 10px 0; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+        .nav-links a:hover { background: #0056b3; }
+        .user-info { background: #d4edda; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .logout-btn { background: #dc3545; }
+        .logout-btn:hover { background: #c82333; }
+    </style>
+</h:head>
+<h:body>
+    <div class="container">
+        <div class="header">
+            <h1>School Management System</h1>
+            <p>Manage people, groups, and schedules</p>
+        </div>
+
+        <h:panelGroup rendered="#{not sessionScope.authenticated}">
+            <div class="login-section">
+                <h3>Login Required</h3>
+                <p>Please log in to access the school management system.</p>
+                <a href="login" style="display: inline-block; padding: 12px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 4px;">Login</a>
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{sessionScope.authenticated}">
+            <div class="user-info">
+                <h3>Welcome, #{sessionScope.username}!</h3>
+                <p>You are logged in as: <strong>#{sessionScope.username}</strong></p>
+                <p>Role: <strong>admin</strong></p>
+            </div>
+
+            <div class="nav-links">
+                <h:link outcome="people" value="Manage People"/>
+                <h:link outcome="groups" value="Manage Groups"/>
+                <h:link outcome="schedule" value="View Schedule"/>
+                
+                <a href="logout" style="display: inline-block; padding: 10px 20px; background: #dc3545; color: white; text-decoration: none; border-radius: 4px;">Logout</a>
+            </div>
+        </h:panelGroup>
+    </div>
+</h:body>
+</html>

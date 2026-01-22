@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <style>
+      .class-box { fill: #f0f8ff; stroke: #4682b4; stroke-width: 2; }
+      .class-title { fill: #000080; font-family: Arial; font-size: 14px; font-weight: bold; }
+      .class-text { fill: #000; font-family: Arial; font-size: 11px; }
+      .relationship { stroke: #333; stroke-width: 1.5; fill: none; }
+      .arrow { fill: #333; }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="25" text-anchor="middle" class="class-title" font-size="18">School Management System - Class Diagram</text>
+  
+  <!-- Person Entity -->
+  <rect x="50" y="50" width="200" height="180" class="class-box"/>
+  <text x="150" y="70" text-anchor="middle" class="class-title">Person</text>
+  <line x1="50" y1="75" x2="250" y2="75" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="90" class="class-text">- id: Long</text>
+  <text x="60" y="105" class="class-text">- firstName: String</text>
+  <text x="60" y="120" class="class-text">- lastName: String</text>
+  <text x="60" y="135" class="class-text">- role: PersonRole</text>
+  <text x="60" y="150" class="class-text">- grade: Grade</text>
+  <text x="60" y="165" class="class-text">- groups: Set&lt;Group&gt;</text>
+  <text x="60" y="180" class="class-text">- subjects: Set&lt;Subject&gt;</text>
+  <line x1="50" y1="185" x2="250" y2="185" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="200" class="class-text">+ getters/setters</text>
+  <text x="60" y="215" class="class-text">+ equals/hashCode</text>
+  
+  <!-- Group Entity -->
+  <rect x="300" y="50" width="180" height="120" class="class-box"/>
+  <text x="390" y="70" text-anchor="middle" class="class-title">Group</text>
+  <line x1="300" y1="75" x2="480" y2="75" stroke="#4682b4" stroke-width="1"/>
+  <text x="310" y="90" class="class-text">- id: Long</text>
+  <text x="310" y="105" class="class-text">- name: String</text>
+  <text x="310" y="120" class="class-text">- description: String</text>
+  <text x="310" y="135" class="class-text">- people: Set&lt;Person&gt;</text>
+  <line x1="300" y1="140" x2="480" y2="140" stroke="#4682b4" stroke-width="1"/>
+  <text x="310" y="155" class="class-text">+ getters/setters</text>
+  
+  <!-- Subject Entity -->
+  <rect x="520" y="50" width="180" height="120" class="class-box"/>
+  <text x="610" y="70" text-anchor="middle" class="class-title">Subject</text>
+  <line x1="520" y1="75" x2="700" y2="75" stroke="#4682b4" stroke-width="1"/>
+  <text x="530" y="90" class="class-text">- id: Long</text>
+  <text x="530" y="105" class="class-text">- name: String</text>
+  <text x="530" y="120" class="class-text">- teachers: Set&lt;Person&gt;</text>
+  <text x="530" y="135" class="class-text">- grades: Set&lt;Grade&gt;</text>
+  <line x1="520" y1="140" x2="700" y2="140" stroke="#4682b4" stroke-width="1"/>
+  <text x="530" y="155" class="class-text">+ getters/setters</text>
+  
+  <!-- Grade Entity -->
+  <rect x="750" y="50" width="180" height="120" class="class-box"/>
+  <text x="840" y="70" text-anchor="middle" class="class-title">Grade</text>
+  <line x1="750" y1="75" x2="930" y2="75" stroke="#4682b4" stroke-width="1"/>
+  <text x="760" y="90" class="class-text">- id: Long</text>
+  <text x="760" y="105" class="class-text">- gradeNumber: Integer</text>
+  <text x="760" y="120" class="class-text">- students: Set&lt;Person&gt;</text>
+  <text x="760" y="135" class="class-text">- subjects: Set&lt;Subject&gt;</text>
+  <line x1="750" y1="140" x2="930" y2="140" stroke="#4682b4" stroke-width="1"/>
+  <text x="760" y="155" class="class-text">+ getters/setters</text>
+  
+  <!-- Schedule Entity -->
+  <rect x="980" y="50" width="180" height="150" class="class-box"/>
+  <text x="1070" y="70" text-anchor="middle" class="class-title">Schedule</text>
+  <line x1="980" y1="75" x2="1160" y2="75" stroke="#4682b4" stroke-width="1"/>
+  <text x="990" y="90" class="class-text">- id: Long</text>
+  <text x="990" y="105" class="class-text">- teacher: Person</text>
+  <text x="990" y="120" class="class-text">- subject: Subject</text>
+  <text x="990" y="135" class="class-text">- grade: Grade</text>
+  <text x="990" y="150" class="class-text">- dayOfWeek: DayOfWeek</text>
+  <text x="990" y="165" class="class-text">- timeSlot: Integer</text>
+  <line x1="980" y1="170" x2="1160" y2="170" stroke="#4682b4" stroke-width="1"/>
+  <text x="990" y="185" class="class-text">+ getters/setters</text>
+  
+  <!-- PersonBean -->
+  <rect x="50" y="280" width="200" height="150" class="class-box"/>
+  <text x="150" y="300" text-anchor="middle" class="class-title">PersonBean</text>
+  <line x1="50" y1="305" x2="250" y2="305" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="320" class="class-text">- personService: PersonService</text>
+  <text x="60" y="335" class="class-text">- selectedPerson: Person</text>
+  <text x="60" y="350" class="class-text">- newPerson: Person</text>
+  <line x1="50" y1="355" x2="250" y2="355" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="370" class="class-text">+ savePerson(): void</text>
+  <text x="60" y="385" class="class-text">+ updatePerson(): String</text>
+  <text x="60" y="400" class="class-text">+ deletePerson(): String</text>
+  <text x="60" y="415" class="class-text">+ loadPeople(): void</text>
+  
+  <!-- GroupBean -->
+  <rect x="300" y="280" width="200" height="150" class="class-box"/>
+  <text x="400" y="300" text-anchor="middle" class="class-title">GroupBean</text>
+  <line x1="300" y1="305" x2="500" y2="305" stroke="#4682b4" stroke-width="1"/>
+  <text x="310" y="320" class="class-text">- entityManager: EntityManager</text>
+  <text x="310" y="335" class="class-text">- selectedGroup: Group</text>
+  <text x="310" y="350" class="class-text">- newGroup: Group</text>
+  <line x1="300" y1="355" x2="500" y2="355" stroke="#4682b4" stroke-width="1"/>
+  <text x="310" y="370" class="class-text">+ saveGroup(): String</text>
+  <text x="310" y="385" class="class-text">+ updateGroup(): String</text>
+  <text x="310" y="400" class="class-text">+ deleteGroup(): String</text>
+  <text x="310" y="415" class="class-text">+ loadGroups(): void</text>
+  
+  <!-- ScheduleBean -->
+  <rect x="550" y="280" width="200" height="120" class="class-box"/>
+  <text x="650" y="300" text-anchor="middle" class="class-title">ScheduleBean</text>
+  <line x1="550" y1="305" x2="750" y2="305" stroke="#4682b4" stroke-width="1"/>
+  <text x="560" y="320" class="class-text">- entityManager: EntityManager</text>
+  <text x="560" y="335" class="class-text">- schedules: List&lt;Schedule&gt;</text>
+  <line x1="550" y1="340" x2="750" y2="340" stroke="#4682b4" stroke-width="1"/>
+  <text x="560" y="355" class="class-text">+ getScheduleGrid(): Map</text>
+  <text x="560" y="370" class="class-text">+ getScheduleForSlot(): List</text>
+  <text x="560" y="385" class="class-text">+ loadSchedules(): void</text>
+  
+  <!-- PersonService -->
+  <rect x="50" y="480" width="200" height="120" class="class-box"/>
+  <text x="150" y="500" text-anchor="middle" class="class-title">PersonService</text>
+  <line x1="50" y1="505" x2="250" y2="505" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="520" class="class-text">- entityManager: EntityManager</text>
+  <line x1="50" y1="525" x2="250" y2="525" stroke="#4682b4" stroke-width="1"/>
+  <text x="60" y="540" class="class-text">+ create(): void</text>
+  <text x="60" y="555" class="class-text">+ findById(): Optional</text>
+  <text x="60" y="570" class="class-text">+ update(): void</text>
+  <text x="60" y="585" class="class-text">+ delete(): void</text>
+  
+  <!-- DataInitializationService -->
+  <rect x="300" y="480" width="220" height="100" class="class-box"/>
+  <text x="410" y="500" text-anchor="middle" class="class-title">DataInitializationService</text>
+  <line x1="300" y1="505" x2="520" y2="505" stroke="#4682b4" stroke-width="1"/>
+  <text x="310" y="520" class="class-text">- entityManager: EntityManager</text>
+  <line x1="300" y1="525" x2="520" y2="525" stroke="#4682b4" stroke-width="1"/>
+  <text x="310" y="540" class="class-text">+ initializeData(): void</text>
+  <text x="310" y="555" class="class-text">- generateSchedule(): void</text>
+  <text x="310" y="570" class="class-text">- isTeacherBusy(): boolean</text>
+  
+  <!-- Enums -->
+  <rect x="800" y="280" width="150" height="80" class="class-box"/>
+  <text x="875" y="300" text-anchor="middle" class="class-title">PersonRole</text>
+  <line x1="800" y1="305" x2="950" y2="305" stroke="#4682b4" stroke-width="1"/>
+  <text x="810" y="320" class="class-text">TEACHER</text>
+  <text x="810" y="335" class="class-text">STUDENT</text>
+  
+  <rect x="980" y="280" width="150" height="120" class="class-box"/>
+  <text x="1055" y="300" text-anchor="middle" class="class-title">DayOfWeek</text>
+  <line x1="980" y1="305" x2="1130" y2="305" stroke="#4682b4" stroke-width="1"/>
+  <text x="990" y="320" class="class-text">MONDAY</text>
+  <text x="990" y="335" class="class-text">TUESDAY</text>
+  <text x="990" y="350" class="class-text">WEDNESDAY</text>
+  <text x="990" y="365" class="class-text">THURSDAY</text>
+  <text x="990" y="380" class="class-text">FRIDAY</text>
+  
+  <!-- Relationships -->
+  <!-- Person to Group (Many-to-Many) -->
+  <line x1="250" y1="140" x2="300" y2="140" class="relationship"/>
+  <text x="275" y="135" class="class-text" font-size="10">*</text>
+  <text x="255" y="135" class="class-text" font-size="10">*</text>
+  
+  <!-- Person to Subject (Many-to-Many for teachers) -->
+  <line x1="250" y1="120" x2="520" y2="120" class="relationship"/>
+  <text x="385" y="115" class="class-text" font-size="10">teaches *</text>
+  
+  <!-- Person to Grade (Many-to-One for students) -->
+  <line x1="250" y1="100" x2="750" y2="100" class="relationship"/>
+  <text x="500" y="95" class="class-text" font-size="10">belongs to</text>
+  
+  <!-- Grade to Subject (Many-to-Many) -->
+  <line x1="700" y1="110" x2="750" y2="110" class="relationship"/>
+  <text x="725" y="105" class="class-text" font-size="10">*</text>
+  
+  <!-- Schedule relationships -->
+  <line x1="980" y1="105" x2="250" y2="105" class="relationship" stroke-dasharray="5,5"/>
+  <text x="615" y="100" class="class-text" font-size="10">references</text>
+  
+  <!-- Bean to Service relationships -->
+  <line x1="150" y1="280" x2="150" y2="230" class="relationship"/>
+  <polygon points="145,235 150,225 155,235" class="arrow"/>
+  
+  <line x1="150" y1="430" x2="150" y2="480" class="relationship"/>
+  <polygon points="145,475 150,485 155,475" class="arrow"/>
+  
+  <!-- Legend -->
+  <rect x="50" y="650" width="300" height="120" fill="#f9f9f9" stroke="#ccc" stroke-width="1"/>
+  <text x="200" y="670" text-anchor="middle" class="class-title">Legend</text>
+  <line x1="60" y1="685" x2="100" y2="685" class="relationship"/>
+  <text x="110" y="690" class="class-text">Association</text>
+  <line x1="60" y1="705" x2="100" y2="705" class="relationship" stroke-dasharray="5,5"/>
+  <text x="110" y="710" class="class-text">Dependency</text>
+  <line x1="60" y1="725" x2="100" y2="725" class="relationship"/>
+  <polygon points="95,720 105,725 95,730" class="arrow"/>
+  <text x="110" y="730" class="class-text">Uses/Calls</text>
+  <text x="60" y="750" class="class-text">* = Many, 1 = One</text>
+</svg>

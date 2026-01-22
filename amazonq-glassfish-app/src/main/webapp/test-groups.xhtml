@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Test Groups</title>
+</h:head>
+
+<h:body>
+    <h:form>
+        <h:outputText value="GroupBean test: #{groupBean != null ? 'Found' : 'Not Found'}"/>
+        <br/>
+        <h:outputText value="Groups count: #{groupBean.groups.size()}"/>
+        <br/>
+        <h:inputText value="#{groupBean.newGroup.name}" placeholder="Group name"/>
+        <br/>
+        <h:commandButton value="Save" action="#{groupBean.saveGroup}"/>
+    </h:form>
+</h:body>
+</html>

@@ -1,0 +1,2 @@
+Build a Java application using maven, which contains REST endpoint to connect to a database, retrieve the list of people entities (a person entity contains first name, last name) from the database and returns a JSON with their details. Configure the project to run as a web app, bundle the JDBC driver and connect to a database running locally in Docker. Adjust the build so that it builds a Docker image that contains the PostgreSQL database and creates a script that, when executed, starts the database in Docker, so that the application connects to it.
+

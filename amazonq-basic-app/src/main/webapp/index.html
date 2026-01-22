@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Management System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .nav { margin-bottom: 20px; }
+        .nav button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .nav button.active { background: #0056b3; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .container { display: flex; gap: 20px; }
+        .column { flex: 1; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .form-group { margin: 10px 0; }
+        input, button, select { padding: 8px; margin: 5px; }
+        button { cursor: pointer; }
+        .btn-delete { background-color: #dc3545; color: white; border: none; }
+        .btn-edit { background-color: #007bff; color: white; border: none; }
+        .btn-save { background-color: #28a745; color: white; border: none; }
+        .btn-primary { background-color: #007bff; color: white; border: none; }
+        .error { color: #dc3545; margin: 5px 0; }
+        .success { color: #28a745; margin: 5px 0; }
+        .schedule-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 1px; background: #ddd; }
+        .schedule-cell { background: white; padding: 8px; min-height: 60px; }
+        .schedule-header { background: #f2f2f2; font-weight: bold; text-align: center; }
+        .schedule-time { background: #f8f9fa; font-weight: bold; }
+        .schedule-item { background: #e3f2fd; margin: 2px 0; padding: 4px; border-radius: 3px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>School Management System</h1>
+    
+    <div class="nav">
+        <button onclick="showSection('teachers')" class="nav-btn active">Teachers</button>
+        <button onclick="showSection('students')" class="nav-btn">Students</button>
+        <button onclick="showSection('schedule')" class="nav-btn">Schedule</button>
+    </div>
+    
+    <!-- Teachers Section -->
+    <div id="teachers" class="section active">
+        <h2>Teachers Management</h2>
+        <div class="form-group">
+            <input type="text" id="teacherFirstName" placeholder="First Name" required maxlength="50">
+            <input type="text" id="teacherLastName" placeholder="Last Name" required maxlength="50">
+            <button onclick="addTeacher()" class="btn-primary">Add Teacher</button>
+            <div id="teacherError" class="error"></div>
+            <div id="teacherSuccess" class="success"></div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="teachersBody">
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Students Section -->
+    <div id="students" class="section">
+        <h2>Students Management</h2>
+        <div class="form-group">
+            <input type="text" id="studentFirstName" placeholder="First Name" required maxlength="50">
+            <input type="text" id="studentLastName" placeholder="Last Name" required maxlength="50">
+            <button onclick="addStudent()" class="btn-primary">Add Student</button>
+            <div id="studentError" class="error"></div>
+            <div id="studentSuccess" class="success"></div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="studentsBody">
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Schedule Section -->
+    <div id="schedule" class="section">
+        <h2>School Schedule</h2>
+        <div class="form-group">
+            <label>Filter by:</label>
+            <select id="scheduleFilter" onchange="loadSchedule()">
+                <option value="all">All Classes</option>
+                <option value="grade/1">Grade 1</option>
+                <option value="grade/2">Grade 2</option>
+                <option value="grade/3">Grade 3</option>
+            </select>
+        </div>
+        <div class="schedule-grid" id="scheduleGrid">
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/person-api/api';
+        let groups = [];
+        let teachers = [];
+        let students = [];
+        
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (sectionName === 'teachers') loadTeachers();
+            else if (sectionName === 'students') loadStudents();
+            else if (sectionName === 'schedule') loadSchedule();
+        }
+        
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+            setTimeout(() => document.getElementById(elementId).textContent = '', 5000);
+        }
+        
+        function showSuccess(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+            setTimeout(() => document.getElementById(elementId).textContent = '', 3000);
+        }
+        
+        function validateInput(value, fieldName, maxLength = 255) {
+            if (!value || value.trim().length === 0) {
+                throw new Error(`${fieldName} is required`);
+            }
+            if (value.trim().length > maxLength) {
+                throw new Error(`${fieldName} must be ${maxLength} characters or less`);
+            }
+            return value.trim();
+        }
+        
+        async function handleApiCall(apiCall, successCallback, errorElementId) {
+            try {
+                const response = await apiCall();
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                if (successCallback) successCallback();
+            } catch (error) {
+                showError(errorElementId, error.message);
+            }
+        }
+        
+        async function loadGroups() {
+            try {
+                const response = await fetch(`${API_BASE}/groups`);
+                groups = await response.json();
+            } catch (error) {
+                console.error('Failed to load groups:', error);
+            }
+        }
+        
+        async function loadTeachers() {
+            try {
+                const response = await fetch(`${API_BASE}/people/teachers`);
+                teachers = await response.json();
+                const tbody = document.getElementById('teachersBody');
+                tbody.innerHTML = '';
+                
+                teachers.forEach(teacher => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${teacher.id}</td>
+                        <td>${escapeHtml(teacher.firstName)} ${escapeHtml(teacher.lastName)}</td>
+                        <td>${escapeHtml(teacher.groupName)}</td>
+                        <td>
+                            <button onclick="deletePerson(${teacher.id}, 'teacher')" class="btn-delete">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                showError('teacherError', 'Failed to load teachers');
+            }
+        }
+        
+        async function loadStudents() {
+            try {
+                const response = await fetch(`${API_BASE}/people/students`);
+                students = await response.json();
+                const tbody = document.getElementById('studentsBody');
+                tbody.innerHTML = '';
+                
+                students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.id}</td>
+                        <td>${escapeHtml(student.firstName)} ${escapeHtml(student.lastName)}</td>
+                        <td>${escapeHtml(student.groupName)}</td>
+                        <td>
+                            <button onclick="deletePerson(${student.id}, 'student')" class="btn-delete">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                showError('studentError', 'Failed to load students');
+            }
+        }
+        
+        async function loadSchedule() {
+            try {
+                const filter = document.getElementById('scheduleFilter').value;
+                const url = filter === 'all' ? `${API_BASE}/schedules` : `${API_BASE}/schedules/${filter}`;
+                const response = await fetch(url);
+                const schedules = await response.json();
+                
+                renderScheduleGrid(schedules);
+            } catch (error) {
+                console.error('Failed to load schedule:', error);
+            }
+        }
+        
+        function renderScheduleGrid(schedules) {
+            const grid = document.getElementById('scheduleGrid');
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            const periods = [1, 2, 3, 4];
+            
+            grid.innerHTML = '';
+            
+            // Header row
+            grid.appendChild(createCell('Time', 'schedule-header'));
+            days.forEach(day => grid.appendChild(createCell(day, 'schedule-header')));
+            
+            // Time slots
+            periods.forEach(period => {
+                const timeSlot = schedules.find(s => s.period === period);
+                const timeLabel = timeSlot ? `Period ${period}<br>${timeSlot.startTime}-${timeSlot.endTime}` : `Period ${period}`;
+                grid.appendChild(createCell(timeLabel, 'schedule-time'));
+                
+                days.forEach(day => {
+                    const daySchedules = schedules.filter(s => s.dayOfWeek === day && s.period === period);
+                    const cell = createCell('', 'schedule-cell');
+                    
+                    daySchedules.forEach(schedule => {
+                        const item = document.createElement('div');
+                        item.className = 'schedule-item';
+                        item.innerHTML = `
+                            <strong>${escapeHtml(schedule.subjectName)}</strong><br>
+                            ${escapeHtml(schedule.gradeName)}<br>
+                            <small>${escapeHtml(schedule.teacherName)}</small>
+                        `;
+                        cell.appendChild(item);
+                    });
+                    
+                    grid.appendChild(cell);
+                });
+            });
+        }
+        
+        function createCell(content, className) {
+            const cell = document.createElement('div');
+            cell.className = className;
+            cell.innerHTML = content;
+            return cell;
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        async function addTeacher() {
+            try {
+                const firstName = validateInput(document.getElementById('teacherFirstName').value, 'First name', 50);
+                const lastName = validateInput(document.getElementById('teacherLastName').value, 'Last name', 50);
+                const teacherGroup = groups.find(g => g.name === 'Teachers');
+                
+                await handleApiCall(
+                    () => fetch(`${API_BASE}/people`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ firstName, lastName, groupId: teacherGroup.id })
+                    }),
+                    () => {
+                        document.getElementById('teacherFirstName').value = '';
+                        document.getElementById('teacherLastName').value = '';
+                        showSuccess('teacherSuccess', 'Teacher added successfully');
+                        loadTeachers();
+                    },
+                    'teacherError'
+                );
+            } catch (error) {
+                showError('teacherError', error.message);
+            }
+        }
+        
+        async function addStudent() {
+            try {
+                const firstName = validateInput(document.getElementById('studentFirstName').value, 'First name', 50);
+                const lastName = validateInput(document.getElementById('studentLastName').value, 'Last name', 50);
+                const studentGroup = groups.find(g => g.name === 'Students');
+                
+                await handleApiCall(
+                    () => fetch(`${API_BASE}/people`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ firstName, lastName, groupId: studentGroup.id })
+                    }),
+                    () => {
+                        document.getElementById('studentFirstName').value = '';
+                        document.getElementById('studentLastName').value = '';
+                        showSuccess('studentSuccess', 'Student added successfully');
+                        loadStudents();
+                    },
+                    'studentError'
+                );
+            } catch (error) {
+                showError('studentError', error.message);
+            }
+        }
+        
+        async function deletePerson(id, type) {
+            if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
+            
+            const errorId = type === 'teacher' ? 'teacherError' : 'studentError';
+            const successId = type === 'teacher' ? 'teacherSuccess' : 'studentSuccess';
+            
+            await handleApiCall(
+                () => fetch(`${API_BASE}/people/${id}`, { method: 'DELETE' }),
+                () => {
+                    showSuccess(successId, `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully`);
+                    if (type === 'teacher') loadTeachers();
+                    else loadStudents();
+                },
+                errorId
+            );
+        }
+        
+        // Initialize
+        loadGroups().then(() => {
+            loadTeachers();
+        });
+    </script>
+</body>
+</html>

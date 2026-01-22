@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<h:head>
+    <title>School Schedule</title>
+    <style>
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: top;
+        }
+        .schedule-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .time-slot {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            width: 80px;
+        }
+        .schedule-item {
+            background-color: #e3f2fd;
+            margin: 2px;
+            padding: 4px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .grade-1 { background-color: #ffebee; }
+        .grade-2 { background-color: #e8f5e8; }
+        .grade-3 { background-color: #fff3e0; }
+    </style>
+</h:head>
+
+<h:body>
+    <h:form id="scheduleForm">
+        <p:growl id="messages" showDetail="true" life="3000"/>
+        
+        <p:panel header="School Schedule - Weekly View" style="margin-bottom:20px">
+            <p:menubar>
+                <p:menuitem value="People" url="people.xhtml"/>
+                <p:menuitem value="Groups" url="groups.xhtml"/>
+                <p:menuitem value="Schedule" url="schedule.xhtml"/>
+                <f:facet name="options">
+                    <p:outputLabel value="Welcome, #{sessionScope.username}" style="margin-right: 10px;"/>
+                    <p:button value="Logout" href="logout" styleClass="ui-button-secondary"/>
+                </f:facet>
+            </p:menubar>
+
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <ui:repeat value="#{scheduleBean.days}" var="day">
+                            <th>#{day}</th>
+                        </ui:repeat>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ui:repeat value="#{scheduleBean.timeSlots}" var="timeSlot">
+                        <tr>
+                            <td class="time-slot">
+                                Period #{timeSlot}<br/>
+                                <small>
+                                    #{timeSlot == 1 ? '8:00-8:45' : 
+                                      timeSlot == 2 ? '8:50-9:35' :
+                                      timeSlot == 3 ? '9:40-10:25' :
+                                      timeSlot == 4 ? '10:30-11:15' :
+                                      timeSlot == 5 ? '11:20-12:05' :
+                                      timeSlot == 6 ? '12:10-12:55' :
+                                      timeSlot == 7 ? '13:00-13:45' :
+                                      timeSlot == 8 ? '13:50-14:35' : ''}
+                                </small>
+                            </td>
+                            <ui:repeat value="#{scheduleBean.days}" var="day">
+                                <td>
+                                    <ui:repeat value="#{scheduleBean.getScheduleForSlot(day, timeSlot)}" var="schedule">
+                                        <div class="schedule-item grade-#{schedule.grade.gradeNumber}">
+                                            <strong>Grade #{schedule.grade.gradeNumber}</strong><br/>
+                                            #{schedule.subject.name}<br/>
+                                            <small>#{schedule.teacher.firstName} #{schedule.teacher.lastName}</small>
+                                        </div>
+                                    </ui:repeat>
+                                </td>
+                            </ui:repeat>
+                        </tr>
+                    </ui:repeat>
+                </tbody>
+            </table>
+        </p:panel>
+    </h:form>
+</h:body>
+</html>

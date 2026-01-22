@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>People Management</title>
+</h:head>
+
+<h:body>
+    <h:form id="form">
+        <p:growl id="messages" showDetail="true" life="3000"/>
+        
+        <p:panel header="People Management" style="margin-bottom:20px">
+            <p:menubar>
+                <p:menuitem value="People" url="people.xhtml"/>
+                <p:menuitem value="Groups" url="groups.xhtml"/>
+                <p:menuitem value="Schedule" url="schedule.xhtml"/>
+                <f:facet name="options">
+                    <p:outputLabel value="Welcome, #{sessionScope.username}" style="margin-right: 10px;"/>
+                    <p:button value="Logout" href="logout" styleClass="ui-button-secondary"/>
+                </f:facet>
+            </p:menubar>
+
+            <p:commandButton value="Add Person" onclick="PF('addDialog').show()" 
+                           icon="pi pi-plus" styleClass="ui-button-success" style="margin:10px 0"/>
+
+            <p:dataTable id="peopleTable" value="#{personBean.people}" var="person"
+                        paginator="true" rows="10" selectionMode="single" 
+                        selection="#{personBean.selectedPerson}" rowKey="#{person.id}">
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{person.id}"/>
+                </p:column>
+
+                <p:column headerText="First Name">
+                    <h:outputText value="#{person.firstName}"/>
+                </p:column>
+
+                <p:column headerText="Last Name">
+                    <h:outputText value="#{person.lastName}"/>
+                </p:column>
+
+                <p:column headerText="Groups">
+                    <h:outputText value="#{person.groups.size()} groups"/>
+                </p:column>
+
+                <p:column headerText="Actions">
+                    <p:commandButton icon="pi pi-pencil" styleClass="ui-button-warning"
+                                   action="#{personBean.selectPersonForEdit(person)}"
+                                   oncomplete="PF('editDialog').show()" 
+                                   update=":editPersonForm"/>
+                    
+                    <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger"
+                                   action="#{personBean.deletePerson(person)}"
+                                   style="margin-left:5px" ajax="false"
+                                   immediate="true"
+                                   onclick="return confirm('Delete this person?')"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <!-- Add Person Dialog -->
+        <p:dialog header="Add Person" widgetVar="addDialog" modal="true" width="500">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="newFirstName" value="First Name:"/>
+                <p:inputText id="newFirstName" value="#{personBean.newPerson.firstName}" required="true"/>
+
+                <p:outputLabel for="newLastName" value="Last Name:"/>
+                <p:inputText id="newLastName" value="#{personBean.newPerson.lastName}" required="true"/>
+
+                <p:outputLabel for="newGroups" value="Groups:"/>
+                <p:selectCheckboxMenu id="newGroups" value="#{personBean.newPerson.groups}" 
+                                    converter="omnifaces.SelectItemsConverter"
+                                    var="group" itemLabel="#{group.name}" itemValue="#{group}">
+                    <f:selectItems value="#{personBean.availableGroups}"/>
+                </p:selectCheckboxMenu>
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Save" action="#{personBean.savePerson}"
+                               update="peopleTable,messages" oncomplete="PF('addDialog').hide()"
+                               styleClass="ui-button-success"/>
+                <p:commandButton value="Cancel" onclick="PF('addDialog').hide()" 
+                               styleClass="ui-button-secondary"/>
+            </f:facet>
+        </p:dialog>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+        </p:confirmDialog>
+    </h:form>
+
+    <!-- Edit Person Dialog -->
+    <p:dialog header="Edit Person" widgetVar="editDialog" modal="true" width="500">
+        <h:form id="editPersonForm">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="editFirstName" value="First Name:"/>
+                <p:inputText id="editFirstName" value="#{personBean.selectedPerson.firstName}" required="true"/>
+
+                <p:outputLabel for="editLastName" value="Last Name:"/>
+                <p:inputText id="editLastName" value="#{personBean.selectedPerson.lastName}" required="true"/>
+
+                <p:outputLabel for="editGroups" value="Groups:"/>
+                <p:selectCheckboxMenu id="editGroups" value="#{personBean.selectedPerson.groups}" 
+                                    converter="omnifaces.SelectItemsConverter"
+                                    var="group" itemLabel="#{group.name}" itemValue="#{group}">
+                    <f:selectItems value="#{personBean.availableGroups}"/>
+                </p:selectCheckboxMenu>
+            </h:panelGrid>
+
+            <p:commandButton value="Update" action="#{personBean.updatePerson}"
+                           styleClass="ui-button-success" ajax="false" style="margin-right:10px"/>
+            <p:commandButton value="Cancel" onclick="PF('editDialog').hide()" 
+                           styleClass="ui-button-secondary" type="button"/>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>

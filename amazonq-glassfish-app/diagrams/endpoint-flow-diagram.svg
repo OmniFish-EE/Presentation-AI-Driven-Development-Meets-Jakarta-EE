@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700">
+  <defs>
+    <style>
+      .endpoint-box { fill: #e6f7ff; stroke: #1890ff; stroke-width: 2; }
+      .method-box { fill: #f6ffed; stroke: #52c41a; stroke-width: 2; }
+      .flow-arrow { stroke: #722ed1; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .endpoint-text { fill: #001529; font-family: Arial; font-size: 12px; font-weight: bold; }
+      .method-text { fill: #135200; font-family: Arial; font-size: 11px; }
+      .title { fill: #001529; font-family: Arial; font-size: 16px; font-weight: bold; text-anchor: middle; }
+      .description { fill: #595959; font-family: Arial; font-size: 10px; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#722ed1"/>
+    </marker>
+  </defs>
+  
+  <text x="500" y="25" class="title">School Management System - Endpoint Flow</text>
+  
+  <!-- Web Endpoints -->
+  <text x="50" y="60" class="title" font-size="14">Web Endpoints</text>
+  
+  <rect x="50" y="80" width="180" height="100" class="endpoint-box"/>
+  <text x="140" y="100" text-anchor="middle" class="endpoint-text">/people.xhtml</text>
+  <text x="60" y="120" class="method-text">GET/POST: CRUD operations</text>
+  <text x="60" y="135" class="method-text">PersonBean methods</text>
+  <text x="60" y="150" class="method-text">Form validation</text>
+  <text x="60" y="165" class="method-text">Navigation outcomes</text>
+  
+  <rect x="250" y="80" width="180" height="100" class="endpoint-box"/>
+  <text x="340" y="100" text-anchor="middle" class="endpoint-text">/groups.xhtml</text>
+  <text x="260" y="120" class="method-text">GET/POST: Group management</text>
+  <text x="260" y="135" class="method-text">GroupBean methods</text>
+  <text x="260" y="150" class="method-text">Dialog forms</text>
+  <text x="260" y="165" class="method-text">AJAX interactions</text>
+  
+  <rect x="450" y="80" width="180" height="100" class="endpoint-box"/>
+  <text x="540" y="100" text-anchor="middle" class="endpoint-text">/schedule.xhtml</text>
+  <text x="460" y="120" class="method-text">GET: Schedule display</text>
+  <text x="460" y="135" class="method-text">ScheduleBean methods</text>
+  <text x="460" y="150" class="method-text">Calendar grid view</text>
+  <text x="460" y="165" class="method-text">Color-coded grades</text>
+  
+  <!-- REST API -->
+  <text x="700" y="60" class="title" font-size="14">REST API</text>
+  
+  <rect x="650" y="80" width="180" height="100" class="endpoint-box"/>
+  <text x="740" y="100" text-anchor="middle" class="endpoint-text">/api/people</text>
+  <text x="660" y="120" class="method-text">GET: List all (JSON)</text>
+  <text x="660" y="135" class="method-text">POST: Create person</text>
+  <text x="660" y="150" class="method-text">PUT: Update person</text>
+  <text x="660" y="165" class="method-text">DELETE: Remove person</text>
+  
+  <!-- Backend Services -->
+  <text x="50" y="220" class="title" font-size="14">Backend Services</text>
+  
+  <rect x="50" y="240" width="150" height="80" class="method-box"/>
+  <text x="125" y="260" text-anchor="middle" class="endpoint-text">PersonService</text>
+  <text x="60" y="280" class="method-text">create(Person)</text>
+  <text x="60" y="295" class="method-text">findById(Long)</text>
+  <text x="60" y="310" class="method-text">update/delete</text>
+  
+  <rect x="220" y="240" width="150" height="80" class="method-box"/>
+  <text x="295" y="260" text-anchor="middle" class="endpoint-text">GroupBean</text>
+  <text x="230" y="280" class="method-text">saveGroup()</text>
+  <text x="230" y="295" class="method-text">updateGroup()</text>
+  <text x="230" y="310" class="method-text">deleteGroup()</text>
+  
+  <rect x="390" y="240" width="150" height="80" class="method-box"/>
+  <text x="465" y="260" text-anchor="middle" class="endpoint-text">ScheduleBean</text>
+  <text x="400" y="280" class="method-text">getScheduleGrid()</text>
+  <text x="400" y="295" class="method-text">loadSchedules()</text>
+  <text x="400" y="310" class="method-text">getScheduleForSlot()</text>
+  
+  <!-- Data Layer -->
+  <text x="50" y="360" class="title" font-size="14">Data Layer</text>
+  
+  <rect x="50" y="380" width="200" height="80" class="method-box"/>
+  <text x="150" y="400" text-anchor="middle" class="endpoint-text">EntityManager (JPA)</text>
+  <text x="60" y="420" class="method-text">persist(), merge(), remove()</text>
+  <text x="60" y="435" class="method-text">createQuery(), find()</text>
+  <text x="60" y="450" class="method-text">Transaction management</text>
+  
+  <rect x="270" y="380" width="200" height="80" class="method-box"/>
+  <text x="370" y="400" text-anchor="middle" class="endpoint-text">PostgreSQL Database</text>
+  <text x="280" y="420" class="method-text">Tables: people, groups, subjects</text>
+  <text x="280" y="435" class="method-text">grades, schedules</text>
+  <text x="280" y="450" class="method-text">Relationships and constraints</text>
+  
+  <!-- Flow Examples -->
+  <text x="550" y="220" class="title" font-size="14">Request Flow Examples</text>
+  
+  <rect x="550" y="240" width="280" height="50" fill="#fff7e6" stroke="#fa8c16" stroke-width="1"/>
+  <text x="560" y="255" class="method-text" font-weight="bold">Add Person:</text>
+  <text x="560" y="270" class="description">Form → PersonBean → PersonService → EntityManager → DB</text>
+  
+  <rect x="550" y="300" width="280" height="50" fill="#f6ffed" stroke="#52c41a" stroke-width="1"/>
+  <text x="560" y="315" class="method-text" font-weight="bold">View Schedule:</text>
+  <text x="560" y="330" class="description">Page → ScheduleBean → EntityManager → DB → Calendar</text>
+  
+  <rect x="550" y="360" width="280" height="50" fill="#f0f5ff" stroke="#1890ff" stroke-width="1"/>
+  <text x="560" y="375" class="method-text" font-weight="bold">REST API:</text>
+  <text x="560" y="390" class="description">GET /api/people → PersonService → EntityManager → JSON</text>
+  
+  <!-- Technology Stack -->
+  <rect x="50" y="500" width="780" height="120" fill="#f9f0ff" stroke="#722ed1" stroke-width="1"/>
+  <text x="60" y="520" class="method-text" font-weight="bold">Technology Stack:</text>
+  <text x="60" y="540" class="description">Jakarta EE 10: JSF, CDI, JPA, EJB</text>
+  <text x="60" y="555" class="description">GlassFish 7.1.0, PostgreSQL 16, PrimeFaces 14.0.0</text>
+  <text x="60" y="570" class="description">Maven build, Docker Compose for database</text>
+  
+  <text x="60" y="590" class="method-text" font-weight="bold">Entity Relationships:</text>
+  <text x="60" y="605" class="description">Person ↔ Group (Many-to-Many), Person → Grade (Many-to-One), Grade ↔ Subject (Many-to-Many)</text>
+  
+  <!-- Flow Arrows -->
+  <path d="M 140 180 L 125 240" class="flow-arrow"/>
+  <path d="M 340 180 L 295 240" class="flow-arrow"/>
+  <path d="M 540 180 L 465 240" class="flow-arrow"/>
+  <path d="M 740 180 L 125 240" class="flow-arrow"/>
+  
+  <path d="M 125 320 L 150 380" class="flow-arrow"/>
+  <path d="M 295 320 L 200 380" class="flow-arrow"/>
+  <path d="M 465 320 L 250 380" class="flow-arrow"/>
+  
+  <path d="M 250 420 L 270 420" class="flow-arrow"/>
+</svg>

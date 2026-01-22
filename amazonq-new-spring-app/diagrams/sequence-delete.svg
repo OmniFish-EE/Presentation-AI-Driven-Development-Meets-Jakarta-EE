@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .actor-box { fill: #e6f3ff; stroke: #0066cc; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; }
+      .title { font-weight: bold; font-size: 16px; }
+      .method { font-size: 11px; }
+      .lifeline { stroke: #666; stroke-width: 2; stroke-dasharray: 5,5; }
+      .message { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .return { stroke: #666; stroke-width: 1; stroke-dasharray: 3,3; marker-end: url(#arrowhead); }
+      .activation { fill: #ffffcc; stroke: #333; stroke-width: 1; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" class="text title" text-anchor="middle">DELETE Operation Sequence Diagram</text>
+
+  <!-- Actors -->
+  <rect x="50" y="60" width="80" height="40" class="actor-box"/>
+  <text x="90" y="85" class="text" text-anchor="middle">Client</text>
+
+  <rect x="180" y="60" width="100" height="40" class="actor-box"/>
+  <text x="230" y="85" class="text" text-anchor="middle">Controller</text>
+
+  <rect x="330" y="60" width="100" height="40" class="actor-box"/>
+  <text x="380" y="85" class="text" text-anchor="middle">Service</text>
+
+  <rect x="480" y="60" width="100" height="40" class="actor-box"/>
+  <text x="530" y="85" class="text" text-anchor="middle">Repository</text>
+
+  <rect x="630" y="60" width="100" height="40" class="actor-box"/>
+  <text x="680" y="85" class="text" text-anchor="middle">Database</text>
+
+  <!-- Lifelines -->
+  <line x1="90" y1="100" x2="90" y2="420" class="lifeline"/>
+  <line x1="230" y1="100" x2="230" y2="420" class="lifeline"/>
+  <line x1="380" y1="100" x2="380" y2="420" class="lifeline"/>
+  <line x1="530" y1="100" x2="530" y2="420" class="lifeline"/>
+  <line x1="680" y1="100" x2="680" y2="420" class="lifeline"/>
+
+  <!-- Messages -->
+  <!-- 1. Client to Controller -->
+  <line x1="90" y1="130" x2="230" y2="130" class="message"/>
+  <text x="160" y="125" class="text method">DELETE /api/people/1</text>
+
+  <!-- Activation boxes -->
+  <rect x="225" y="130" width="10" height="250" class="activation"/>
+
+  <!-- 2. Controller to Service -->
+  <line x1="235" y1="150" x2="380" y2="150" class="message"/>
+  <text x="307" y="145" class="text method">delete(1)</text>
+
+  <rect x="375" y="150" width="10" height="200" class="activation"/>
+
+  <!-- 3. Service to Repository (check exists) -->
+  <line x1="385" y1="170" x2="530" y2="170" class="message"/>
+  <text x="457" y="165" class="text method">existsById(1)</text>
+
+  <rect x="525" y="170" width="10" height="60" class="activation"/>
+
+  <!-- 4. Repository to Database -->
+  <line x1="535" y1="190" x2="680" y2="190" class="message"/>
+  <text x="607" y="185" class="text method">SELECT COUNT(*) FROM people WHERE id=1</text>
+
+  <rect x="675" y="190" width="10" height="20" class="activation"/>
+
+  <!-- 5. Database return -->
+  <line x1="675" y1="210" x2="535" y2="210" class="return"/>
+  <text x="605" y="205" class="text method">true</text>
+
+  <!-- 6. Repository return -->
+  <line x1="525" y1="230" x2="385" y2="230" class="return"/>
+  <text x="455" y="225" class="text method">true</text>
+
+  <!-- 7. Service to Repository (delete) -->
+  <line x1="385" y1="260" x2="530" y2="260" class="message"/>
+  <text x="457" y="255" class="text method">deleteById(1)</text>
+
+  <rect x="525" y="260" width="10" height="60" class="activation"/>
+
+  <!-- 8. Repository to Database -->
+  <line x1="535" y1="280" x2="680" y2="280" class="message"/>
+  <text x="607" y="275" class="text method">DELETE FROM people WHERE id=1</text>
+
+  <rect x="675" y="280" width="10" height="20" class="activation"/>
+
+  <!-- 9. Database return -->
+  <line x1="675" y1="300" x2="535" y2="300" class="return"/>
+  <text x="605" y="295" class="text method">success</text>
+
+  <!-- 10. Repository return -->
+  <line x1="525" y1="320" x2="385" y2="320" class="return"/>
+  <text x="455" y="315" class="text method">void</text>
+
+  <!-- 11. Service return -->
+  <line x1="375" y1="340" x2="235" y2="340" class="return"/>
+  <text x="305" y="335" class="text method">void</text>
+
+  <!-- 12. Controller return -->
+  <line x1="225" y1="360" x2="90" y2="360" class="return"/>
+  <text x="157" y="355" class="text method">HTTP 204 No Content</text>
+
+  <!-- Transaction boundaries -->
+  <rect x="370" y="140" width="320" height="220" fill="none" stroke="#00aa00" stroke-width="2" stroke-dasharray="10,5"/>
+  <text x="375" y="135" class="text" fill="#00aa00">@Transactional</text>
+
+  <!-- Error case -->
+  <rect x="50" y="390" width="680" height="60" fill="#ffeeee" stroke="#cc0000"/>
+  <text x="60" y="410" class="text">Error Case: If entity doesn't exist, service throws IllegalArgumentException</text>
+  <text x="60" y="425" class="text">Controller returns HTTP 400 Bad Request with error message</text>
+
+  <!-- Notes -->
+  <rect x="50" y="460" width="680" height="40" fill="#f0f0f0" stroke="#999"/>
+  <text x="60" y="480" class="text">Notes: Delete operations verify entity exists before attempting deletion</text>
+
+</svg>

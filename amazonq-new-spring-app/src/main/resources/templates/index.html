@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>School Management System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background-color: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .logout-btn { background-color: #dc3545; color: white; padding: 8px 15px; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; }
+        .logout-btn:hover { background-color: #c82333; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .section { flex: 1; min-width: 300px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 5px 10px; margin: 2px; cursor: pointer; border: none; border-radius: 3px; }
+        .btn-edit { background-color: #007bff; color: white; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        .btn-add { background-color: #28a745; color: white; }
+        .form-group { margin: 10px 0; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; padding: 5px; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 400px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .calendar { width: 100%; margin: 20px 0; }
+        .calendar-header { background-color: #4CAF50; color: white; text-align: center; padding: 10px; }
+        .calendar-table { width: 100%; border-collapse: collapse; }
+        .calendar-table th { background-color: #f2f2f2; padding: 10px; text-align: center; border: 1px solid #ddd; }
+        .calendar-table td { border: 1px solid #ddd; padding: 8px; vertical-align: top; height: 80px; }
+        .time-slot { font-weight: bold; background-color: #e8f5e8; text-align: center; }
+        .class-item { background-color: #fff3cd; margin: 2px 0; padding: 3px; border-radius: 3px; font-size: 11px; position: relative; }
+        .grade-1 { background-color: #d4edda; }
+        .grade-2 { background-color: #cce5ff; }
+        .grade-3 { background-color: #ffe6cc; }
+        .class-actions { position: absolute; top: 2px; right: 2px; }
+        .class-actions button { font-size: 8px; padding: 1px 3px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>School Management System</h1>
+        <div class="user-info">
+            <span th:if="${username}">Welcome, <strong th:text="${username}">User</strong></span>
+            <span th:if="${roles}" th:text="'Roles: ' + ${roles}">Roles</span>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+    
+    <h1>School Management System</h1>
+    
+    <div class="container">
+        <div class="section">
+            <h2>People <button class="btn btn-add" onclick="openPersonModal()">Add Person</button></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Group</th>
+                        <th>Grade</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="peopleBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Groups <button class="btn btn-add" onclick="openGroupModal()">Add Group</button></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="groupsBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Subjects <button class="btn btn-add" onclick="openSubjectModal()">Add Subject</button></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="subjectsBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Grades <button class="btn btn-add" onclick="openGradeModal()">Add Grade</button></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="calendar">
+        <div class="calendar-header">
+            <h2>Weekly Schedule <button class="btn btn-add" onclick="openScheduleModal()">Add Schedule</button></h2>
+        </div>
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Person Modal -->
+    <div id="personModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('personModal')">&times;</span>
+            <h3 id="personModalTitle">Add Person</h3>
+            <form id="personForm">
+                <div class="form-group">
+                    <label>First Name:</label>
+                    <input type="text" id="personFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name:</label>
+                    <input type="text" id="personLastName" required>
+                </div>
+                <div class="form-group">
+                    <label>Group:</label>
+                    <select id="personGroup">
+                        <option value="">Select Group</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-add">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Group Modal -->
+    <div id="groupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('groupModal')">&times;</span>
+            <h3 id="groupModalTitle">Add Group</h3>
+            <form id="groupForm">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="groupName" required>
+                </div>
+                <button type="submit" class="btn btn-add">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Subject Modal -->
+    <div id="subjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('subjectModal')">&times;</span>
+            <h3 id="subjectModalTitle">Add Subject</h3>
+            <form id="subjectForm">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="subjectName" required>
+                </div>
+                <button type="submit" class="btn btn-add">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grade Modal -->
+    <div id="gradeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('gradeModal')">&times;</span>
+            <h3 id="gradeModalTitle">Add Grade</h3>
+            <form id="gradeForm">
+                <div class="form-group">
+                    <label>Level:</label>
+                    <input type="number" id="gradeLevel" min="1" required>
+                </div>
+                <button type="submit" class="btn btn-add">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('scheduleModal')">&times;</span>
+            <h3 id="scheduleModalTitle">Add Schedule</h3>
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label>Day:</label>
+                    <select id="scheduleDayOfWeek" required>
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Time Slot:</label>
+                    <select id="scheduleTimeSlot" required>
+                        <option value="1">8:00-9:00</option>
+                        <option value="2">9:00-10:00</option>
+                        <option value="3">10:00-11:00</option>
+                        <option value="4">11:00-12:00</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Teacher:</label>
+                    <select id="scheduleTeacher" required>
+                        <option value="">Select Teacher</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <select id="scheduleSubject" required>
+                        <option value="">Select Subject</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Grade:</label>
+                    <select id="scheduleGrade" required>
+                        <option value="">Select Grade</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-add">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentEditId = null;
+        let currentEditType = null;
+
+        // Load all data
+        function loadAllData() {
+            loadPeople();
+            loadGroups();
+            loadSubjects();
+            loadGrades();
+            loadSchedule();
+        }
+
+        function loadPeople() {
+            fetch('/api/people')
+                .then(response => response.json())
+                .then(people => {
+                    const tbody = document.getElementById('peopleBody');
+                    tbody.innerHTML = '';
+                    people.forEach(person => {
+                        const groupName = person.group ? person.group.name : 'None';
+                        const gradeName = person.grade ? `Grade ${person.grade.level}` : 'None';
+                        const row = `
+                            <tr>
+                                <td>${person.firstName} ${person.lastName}</td>
+                                <td>${groupName}</td>
+                                <td>${gradeName}</td>
+                                <td>
+                                    <button class="btn btn-edit" onclick="editPerson(${person.id})">Edit</button>
+                                    <button class="btn btn-delete" onclick="deletePerson(${person.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                });
+        }
+
+        function loadGroups() {
+            fetch('/api/groups')
+                .then(response => response.json())
+                .then(groups => {
+                    const tbody = document.getElementById('groupsBody');
+                    tbody.innerHTML = '';
+                    
+                    // Update person group dropdown
+                    const groupSelect = document.getElementById('personGroup');
+                    groupSelect.innerHTML = '<option value="">Select Group</option>';
+                    
+                    groups.forEach(group => {
+                        const row = `
+                            <tr>
+                                <td>${group.name}</td>
+                                <td>
+                                    <button class="btn btn-edit" onclick="editGroup(${group.id})">Edit</button>
+                                    <button class="btn btn-delete" onclick="deleteGroup(${group.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                        groupSelect.innerHTML += `<option value="${group.id}">${group.name}</option>`;
+                    });
+                });
+        }
+
+        function loadSubjects() {
+            fetch('/api/subjects')
+                .then(response => response.json())
+                .then(subjects => {
+                    const tbody = document.getElementById('subjectsBody');
+                    tbody.innerHTML = '';
+                    
+                    // Update schedule subject dropdown
+                    const subjectSelect = document.getElementById('scheduleSubject');
+                    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+                    
+                    subjects.forEach(subject => {
+                        const row = `
+                            <tr>
+                                <td>${subject.name}</td>
+                                <td>
+                                    <button class="btn btn-edit" onclick="editSubject(${subject.id})">Edit</button>
+                                    <button class="btn btn-delete" onclick="deleteSubject(${subject.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                        subjectSelect.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
+                    });
+                });
+        }
+
+        function loadGrades() {
+            fetch('/api/grades')
+                .then(response => response.json())
+                .then(grades => {
+                    const tbody = document.getElementById('gradesBody');
+                    tbody.innerHTML = '';
+                    
+                    // Update schedule grade dropdown
+                    const gradeSelect = document.getElementById('scheduleGrade');
+                    gradeSelect.innerHTML = '<option value="">Select Grade</option>';
+                    
+                    grades.forEach(grade => {
+                        const row = `
+                            <tr>
+                                <td>${grade.level}</td>
+                                <td>
+                                    <button class="btn btn-edit" onclick="editGrade(${grade.id})">Edit</button>
+                                    <button class="btn btn-delete" onclick="deleteGrade(${grade.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                        gradeSelect.innerHTML += `<option value="${grade.id}">Grade ${grade.level}</option>`;
+                    });
+                });
+        }
+
+        function loadSchedule() {
+            Promise.all([
+                fetch('/api/schedules').then(r => r.json()),
+                fetch('/api/people').then(r => r.json())
+            ]).then(([schedules, people]) => {
+                const tbody = document.getElementById('calendarBody');
+                const timeSlots = ['8:00-9:00', '9:00-10:00', '10:00-11:00', '11:00-12:00'];
+                
+                // Update teacher dropdown
+                const teacherSelect = document.getElementById('scheduleTeacher');
+                teacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+                const teachers = people.filter(p => p.group && p.group.name === 'Teachers');
+                teachers.forEach(teacher => {
+                    teacherSelect.innerHTML += `<option value="${teacher.id}">${teacher.firstName} ${teacher.lastName}</option>`;
+                });
+                
+                tbody.innerHTML = '';
+                
+                for (let slot = 1; slot <= 4; slot++) {
+                    const row = document.createElement('tr');
+                    
+                    const timeCell = document.createElement('td');
+                    timeCell.className = 'time-slot';
+                    timeCell.textContent = timeSlots[slot - 1];
+                    row.appendChild(timeCell);
+                    
+                    for (let day = 1; day <= 5; day++) {
+                        const dayCell = document.createElement('td');
+                        
+                        const daySchedules = schedules.filter(s => 
+                            s.dayOfWeek === day && s.timeSlot === slot
+                        );
+                        
+                        daySchedules.sort((a, b) => a.grade.level - b.grade.level);
+                        
+                        daySchedules.forEach(schedule => {
+                            const classDiv = document.createElement('div');
+                            classDiv.className = `class-item grade-${schedule.grade.level}`;
+                            classDiv.innerHTML = `
+                                <div class="class-actions">
+                                    <button class="btn btn-edit" onclick="editSchedule(${schedule.id})">E</button>
+                                    <button class="btn btn-delete" onclick="deleteSchedule(${schedule.id})">D</button>
+                                </div>
+                                <strong>Grade ${schedule.grade.level}</strong><br>
+                                ${schedule.subject.name}<br>
+                                <small>${schedule.teacher.firstName} ${schedule.teacher.lastName}</small>
+                            `;
+                            dayCell.appendChild(classDiv);
+                        });
+                        
+                        row.appendChild(dayCell);
+                    }
+                    
+                    tbody.appendChild(row);
+                }
+            });
+        }
+
+        // Modal functions
+        function openPersonModal(person = null) {
+            currentEditId = person ? person.id : null;
+            currentEditType = 'person';
+            document.getElementById('personModalTitle').textContent = person ? 'Edit Person' : 'Add Person';
+            document.getElementById('personFirstName').value = person ? person.firstName : '';
+            document.getElementById('personLastName').value = person ? person.lastName : '';
+            document.getElementById('personGroup').value = person && person.group ? person.group.id : '';
+            document.getElementById('personModal').style.display = 'block';
+        }
+
+        function openGroupModal(group = null) {
+            currentEditId = group ? group.id : null;
+            currentEditType = 'group';
+            document.getElementById('groupModalTitle').textContent = group ? 'Edit Group' : 'Add Group';
+            document.getElementById('groupName').value = group ? group.name : '';
+            document.getElementById('groupModal').style.display = 'block';
+        }
+
+        function openSubjectModal(subject = null) {
+            currentEditId = subject ? subject.id : null;
+            currentEditType = 'subject';
+            document.getElementById('subjectModalTitle').textContent = subject ? 'Edit Subject' : 'Add Subject';
+            document.getElementById('subjectName').value = subject ? subject.name : '';
+            document.getElementById('subjectModal').style.display = 'block';
+        }
+
+        function openGradeModal(grade = null) {
+            currentEditId = grade ? grade.id : null;
+            currentEditType = 'grade';
+            document.getElementById('gradeModalTitle').textContent = grade ? 'Edit Grade' : 'Add Grade';
+            document.getElementById('gradeLevel').value = grade ? grade.level : '';
+            document.getElementById('gradeModal').style.display = 'block';
+        }
+
+        function openScheduleModal(schedule = null) {
+            currentEditId = schedule ? schedule.id : null;
+            currentEditType = 'schedule';
+            document.getElementById('scheduleModalTitle').textContent = schedule ? 'Edit Schedule' : 'Add Schedule';
+            document.getElementById('scheduleDayOfWeek').value = schedule ? schedule.dayOfWeek : '';
+            document.getElementById('scheduleTimeSlot').value = schedule ? schedule.timeSlot : '';
+            document.getElementById('scheduleTeacher').value = schedule ? schedule.teacher.id : '';
+            document.getElementById('scheduleSubject').value = schedule ? schedule.subject.id : '';
+            document.getElementById('scheduleGrade').value = schedule ? schedule.grade.id : '';
+            document.getElementById('scheduleModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            currentEditId = null;
+            currentEditType = null;
+        }
+
+        // Edit functions
+        function editPerson(id) {
+            fetch(`/api/people`)
+                .then(response => response.json())
+                .then(people => {
+                    const person = people.find(p => p.id === id);
+                    openPersonModal(person);
+                });
+        }
+
+        function editGroup(id) {
+            fetch(`/api/groups`)
+                .then(response => response.json())
+                .then(groups => {
+                    const group = groups.find(g => g.id === id);
+                    openGroupModal(group);
+                });
+        }
+
+        function editSubject(id) {
+            fetch(`/api/subjects`)
+                .then(response => response.json())
+                .then(subjects => {
+                    const subject = subjects.find(s => s.id === id);
+                    openSubjectModal(subject);
+                });
+        }
+
+        function editGrade(id) {
+            fetch(`/api/grades`)
+                .then(response => response.json())
+                .then(grades => {
+                    const grade = grades.find(g => g.id === id);
+                    openGradeModal(grade);
+                });
+        }
+
+        function editSchedule(id) {
+            fetch(`/api/schedules`)
+                .then(response => response.json())
+                .then(schedules => {
+                    const schedule = schedules.find(s => s.id === id);
+                    openScheduleModal(schedule);
+                });
+        }
+
+        // Delete functions
+        function deletePerson(id) {
+            if (confirm('Are you sure you want to delete this person?')) {
+                fetch(`/api/people/${id}`, { method: 'DELETE' })
+                    .then(() => loadAllData());
+            }
+        }
+
+        function deleteGroup(id) {
+            if (confirm('Are you sure you want to delete this group?')) {
+                fetch(`/api/groups/${id}`, { method: 'DELETE' })
+                    .then(() => loadAllData());
+            }
+        }
+
+        function deleteSubject(id) {
+            if (confirm('Are you sure you want to delete this subject?')) {
+                fetch(`/api/subjects/${id}`, { method: 'DELETE' })
+                    .then(() => loadAllData());
+            }
+        }
+
+        function deleteGrade(id) {
+            if (confirm('Are you sure you want to delete this grade?')) {
+                fetch(`/api/grades/${id}`, { method: 'DELETE' })
+                    .then(() => loadAllData());
+            }
+        }
+
+        function deleteSchedule(id) {
+            if (confirm('Are you sure you want to delete this schedule?')) {
+                fetch(`/api/schedules/${id}`, { method: 'DELETE' })
+                    .then(() => loadAllData());
+            }
+        }
+
+        // Form submissions
+        document.getElementById('personForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                firstName: document.getElementById('personFirstName').value,
+                lastName: document.getElementById('personLastName').value,
+                groupId: document.getElementById('personGroup').value || null
+            };
+            
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `/api/people/${currentEditId}` : '/api/people';
+            
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                closeModal('personModal');
+                loadAllData();
+            });
+        });
+
+        document.getElementById('groupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = { name: document.getElementById('groupName').value };
+            
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `/api/groups/${currentEditId}` : '/api/groups';
+            
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                closeModal('groupModal');
+                loadAllData();
+            });
+        });
+
+        document.getElementById('subjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = { name: document.getElementById('subjectName').value };
+            
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `/api/subjects/${currentEditId}` : '/api/subjects';
+            
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                closeModal('subjectModal');
+                loadAllData();
+            });
+        });
+
+        document.getElementById('gradeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = { level: parseInt(document.getElementById('gradeLevel').value) };
+            
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `/api/grades/${currentEditId}` : '/api/grades';
+            
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                closeModal('gradeModal');
+                loadAllData();
+            });
+        });
+
+        document.getElementById('scheduleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                dayOfWeek: parseInt(document.getElementById('scheduleDayOfWeek').value),
+                timeSlot: parseInt(document.getElementById('scheduleTimeSlot').value),
+                teacherId: parseInt(document.getElementById('scheduleTeacher').value),
+                subjectId: parseInt(document.getElementById('scheduleSubject').value),
+                gradeId: parseInt(document.getElementById('scheduleGrade').value)
+            };
+            
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `/api/schedules/${currentEditId}` : '/api/schedules';
+            
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                closeModal('scheduleModal');
+                loadAllData();
+            });
+        });
+
+        // Load data on page load
+        loadAllData();
+    </script>
+</body>
+</html>

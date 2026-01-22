@@ -1,0 +1,26 @@
+Build a Java application using maven, which contains REST endpoint to connect to a database, retrieve the list of people entities (a person entity contains first name, last name) from the database and returns a JSON with their details. Configure the project to run on GlassFish, bundle the JDBC driver and connect to a database running locally in Docker. Adjust the build so that it builds a Docker image that contains the PostgreSQL database and creates a script that, when executed, starts the database in Docker, so that the application connects to it.
+
+(Explained what it will do and asked for approval - I approved)
+
+Start it and verify it runs and produces the expected result when calling the REST endpoint. Fix it if it 
+doesn't.
+
+Create a CRUD UI to display and modify the database of the people
+
+Now update the UI to create groups of people and assign them to groups.
+
+Scan all the code and apply all the best practices everywhere. For example validate input, check the transaction boundaries are where they should be, the code follows KISS, DRY, and SOLID
+
+Turn the application to a system that manages teachers (people that are in group Teachers) and students (in group Students). Teachers can be assigned subjects that they teach, students are assigned to grades, grades are assigned subjects which students in that grade attend. Subjects are English, Math, Physical education for grade 1, English, Math, Physical education, Biology for grade 2, and English, Math, Spanish, Physical education, Biology, History for grade 3. Generate a schedule for subjects, teachers and grades. The same teacher cannot be in the same timeslot for different grades. Each grade can be assigned only one slot in the same period, as in a school schedule. Generate sample data: 10 teachers and 2 students per grade.
+
+Display the schedule as a calendar, one week per screen
+
+Each grade can be assigned only one slot in the same period
+
+Create a class diagram and a sequence diagram for all endpoints. Generate them as SVG files in the diagram
+s directory
+
+Add authentication via OAuth with KeyClock running in Docker and with a default user admin and password "admin" and role "admin". Allow access to the schedule and CRUD pages and REST endpoints only to the admin role. Do not depend on KeyCloak in the source code. Use standard Jakarta EE OIDC mechanism and create a UI form 
+to log in
+
+Scan all the code and apply all the best practices everywhere. For example validate input, check the transaction boundaries are where they should be, the code follows KISS, DRY, and SOLID
