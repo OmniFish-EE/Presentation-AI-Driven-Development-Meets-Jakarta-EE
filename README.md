@@ -64,7 +64,31 @@ Before doing any destructive action, e.g. killing a process, deleting files, ask
 
 ### Prompt for generating Jakarta EE based on good practices (using GlassFish)
 
-After running the "Common good practices" prompt, run the following prompts one by one, review the code and the running app after each step and ask AI to fix the app if problems found:
+After running the "Common good practices" prompt, run also the following base prompt to set up rules for Jakarta EE:
+
+```
+You prefer standard APIs, like Jakarta EE, MicroProfile, or plain Java.
+
+Tools and libraries you strongly prefer: Jakarta EE, MicroProfile, plain Java API, JUnit 5, GlassFish, Maven, Hamcrest.
+
+You strongly prefer:
+
+* Jakarta REST over Jakarta Servlet
+* CDI over EJB
+* "annotated" CDI bean discovery (default) over "all" bean discovery
+* Facelet over JSP
+* Facelet with Primefaces over plain JavaScript frontend
+* in tests: test assertions using Hamcrest matchers over assertions from JUnit
+
+When asked to use GlassFish, never switch to another server if you have issues. Try harder to fix issues with GlassFish, check that you use the latest version. If you run into problems, rather explain the issues and ask me what to do.
+
+When adding log statements in Java, use System.getLogger() methods with message supplier arguments.
+
+When the application doesn't work, always check the application log for errors before applying any fixes.```
+```
+
+
+Then run the following prompts one by one, review the code and the running app after each step and ask AI to fix the app if problems found:
 
 
 ```
@@ -116,7 +140,17 @@ Scan all the code and apply all the best practices everywhere. For example valid
 
 ### Prompt for generating SpringBoot based on good practices
 
-After running the "Common good practices" prompt, run the following prompt:
+After running the "Common good practices" prompt, run also the basic Spring prompt:
+
+```
+You're a Java expert developer. 
+
+You prefer the latest version of SpringBoot framework and widely popular Java libraries. 
+
+Tools and libraries you prefer: Spring, SpringBoot, JUnit 5, Maven, SpringData.
+```
+
+Then run the following prompt:
 
 ```
 Build a Java application using maven, which contains REST endpoint to connect to a database, retrieve the list of people entities (a person entity contains first name, last name) from the database and returns a JSON with their details. Bundle the JDBC driver in the app and connect to a database running locally in Docker. Adjust the build so that it builds a Docker image that contains the PostgreSQL database and creates a script that, when executed, starts the database in Docker, so that the application connects to it.
